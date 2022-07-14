@@ -1,7 +1,7 @@
 NORMAL = \033[m
 CYAN = \033[0;36m
 CC = gcc
-DFLAG = -fno-omit-frame-pointer -O2 -Wextra -Wall -Winline -pedantic -std=c99
+DFLAG = -fno-omit-frame-pointer -O2 -Wextra -Wall -Winline -pedantic -std=c99 -fsanitize=leak -fsanitize=address
 test = TEST
 
 all: compiler.h simpletest.h eva_alloc.h eva_string.c

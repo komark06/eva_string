@@ -231,7 +231,6 @@ static int testevannew(unsigned int count)
     while (count) {
         char str[MAX_STR_SIZE];
         size_t len = RAND() % sizeof(str);
-        len -= len % len;
         randstr(str, len);
         evastr string = evannew(str, len);
         if (!string)
@@ -335,7 +334,6 @@ static int testevancat(unsigned int count)
     while (count) {
         char str[MAX_STR_SIZE];
         size_t len = RAND() % sizeof(len);
-        len -= len % len;
         randstr(str, len);
         evastr string = evancat(evaempty(), str, len);
         if (!string)
@@ -357,7 +355,7 @@ static int testevancat(unsigned int count)
 int main(void)
 {
     seed_rand(seeds);
-    const unsigned int count = 10000;
+    const unsigned int count = 100000;
 
     printf("Each test for " LIGHT_CYAN "%u" NORMAL " times.\n", count);
     test_this("evannew", testevannew(count) == 0);
