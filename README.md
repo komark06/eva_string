@@ -55,7 +55,7 @@ printf("%zu\n",evalen(test));
 output > 0
 ```
 The `evanew` function creates `eva_string` from null-terminated string.  
-The `evannew` function is similar to `evanew`. But it doesn't expect a null-terminated string, so it has additional length parameter.  
+The `evannew` function is similar to `evanew`. But it doesn't expect a null-terminated string, so it has additional length parameter. If `src` is `NULL` , content of string will set to `"\0"` .
 The `evadup` function creates `eva_string` from another `eva_string` .
 ```c
 evastr test = evanew("Hello");
