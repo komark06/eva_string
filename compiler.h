@@ -19,7 +19,7 @@
         const __typeof__(((type *) 0)->member) *__pmember = (ptr); \
         (type *) ((char *) __pmember - offsetof(type, member));    \
     })
-#define nonnull(...) __attribute__((nonnull(__VA_ARGS__)))
+#define nonnull(...) __attribute__((__nonnull__(__VA_ARGS__)))
 #endif
 #else
 #ifndef likely
@@ -31,6 +31,9 @@
 #ifndef container_of
 #define container_of(ptr, type, member) \
     ((type *) ((char *) (ptr) -offsetof(type, member)))
+#endif
+#ifndef nonull(...)
+#define nonnull(...)
 #endif
 #endif
 

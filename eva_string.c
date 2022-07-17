@@ -19,10 +19,10 @@ typedef struct EVA eva_t;
 
 static inline size_t evaoffset(void)
 {
-    return sizeof(uint32_t)*2;
+    return sizeof(uint32_t) * 2;
 }
 
-static inline size_t evaspace(evastr nerv)
+nonnull() static inline size_t evaspace(evastr nerv)
 {
     return EVA_T(nerv)->space;
 }
@@ -51,7 +51,7 @@ static inline size_t digit10(const unsigned long long val)
     return 12 + digit10(val / 1000000000000);  // 10 to the power of 12
 }
 
-nonnull(1) static inline eva_t *evagrow(evastr src, uint32_t len)
+nonnull() static inline eva_t *evagrow(evastr src, uint32_t len)
 {
     eva_t *obj = EVA_T(src);
     if (obj->space >= len)
@@ -77,7 +77,7 @@ evastr evaempty(void)
     return evannew("", 0);
 }
 
-evastr evanew(const char *src)
+nonnull(1) evastr evanew(const char *src)
 {
     return evannew(src, strlen(src));
 }
@@ -91,13 +91,15 @@ evastr evannew(const char *src, uint32_t len)
         return NULL;
     obj->len = len;
     obj->space = len;
-    if (!src || len)
+    if (src)
         memcpy(obj->str, src, len);
+    else
+        memset(obj->str, '\0', len);
     obj->str[len] = '\0';
     return obj->str;
 }
 
-evastr evadup(const evastr src)
+nonnull() evastr evadup(const evastr src)
 {
     return evannew(src, evalen(src));
 }
@@ -126,9 +128,8 @@ evastr evaLL(long long value)
     return evannew(buf, size);
 }
 
-evastr evancpy(evastr restrict dst,
-               const char *restrict src,
-               const uint32_t len)
+nonnull() evastr
+    evancpy(evastr restrict dst, const char *restrict src, const uint32_t len)
 {
     eva_t *obj = evagrow(dst, len);
     if (!obj)
@@ -139,12 +140,12 @@ evastr evancpy(evastr restrict dst,
     return obj->str;
 }
 
-evastr evacpy(evastr restrict dst, const char *restrict src)
+nonnull() evastr evacpy(evastr restrict dst, const char *restrict src)
 {
     return evancpy(dst, src, strlen(src));
 }
 
-evastr evancat(evastr dst, const char *src, const size_t len)
+nonnull() evastr evancat(evastr dst, const char *src, const size_t len)
 {
     eva_t *obj = EVA_T(dst);
     if (unlikely(len > UINT32_MAX - obj->len))
@@ -158,17 +159,17 @@ evastr evancat(evastr dst, const char *src, const size_t len)
     return obj->str;
 }
 
-evastr evacat(evastr dst, const char *src)
+nonnull() evastr evacat(evastr dst, const char *src)
 {
     return evancat(dst, src, strlen(src));
 }
 
-evastr evacateva(evastr dst, const evastr src)
+nonnull() evastr evacateva(evastr dst, const evastr src)
 {
     return evancat(dst, src, evalen(src));
 }
 
-evastr evacatprintf(evastr dst, const char *format, ...)
+nonnull() evastr evacatprintf(evastr dst, const char *format, ...)
 {
     va_list args, temp;
     va_start(args, format);
@@ -198,7 +199,7 @@ Fail:
     return NULL;
 }
 
-evastr evaresize(evastr dst)
+nonnull() evastr evaresize(evastr dst)
 {
     if (evaspace(dst) == 0)
         return dst;
